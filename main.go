@@ -10,8 +10,9 @@ import (
 )
 
 var options struct {
-	Format string `short:"f" long:"format" name:"output format" description:"format output with text/template syntax"`
-	Args   struct {
+	Format    string `short:"f" long:"format" name:"output format" description:"format output with text/template syntax"`
+	NoNewline bool   `short:"n" long:"no-newline" name:"no newline" description:"do not print new line symbol'"`
+	Args      struct {
 		Input string `positional-arg-name:"input"`
 	} `positional-args:"true" required:"1"`
 }
@@ -27,6 +28,14 @@ func logAndExit(err error) {
 	}
 
 	os.Exit(1)
+}
+
+func formatOutput(desired string) string {
+	if options.NoNewline {
+		return desired
+	}
+
+	return desired + "\n"
 }
 
 func main() {
@@ -50,7 +59,7 @@ func main() {
 	}
 
 	if options.Format != "" {
-		tpl, err := template.New("gurl").Parse(options.Format + "\n")
+		tpl, err := template.New("gurl").Parse(formatOutput(options.Format))
 		if err != nil {
 			logAndExit(err)
 		}
@@ -62,7 +71,7 @@ func main() {
 		return
 	}
 
-	if _, err := fmt.Fprintln(os.Stdout, string(output)); err != nil {
+	if _, err := fmt.Fprint(os.Stdout, formatOutput(string(output))); err != nil {
 		logAndExit(err)
 	}
 }

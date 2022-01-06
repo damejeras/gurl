@@ -8,10 +8,11 @@ Usage:
   gurl [OPTIONS] input
 
 Application Options:
-  -f, --format= format output with text/template syntax
+  -f, --format=     format output with text/template syntax
+  -n, --no-newline  do not print new line symbol'
 
 Help Options:
-  -h, --help    Show this help message
+  -h, --help        Show this help message
 ```
 
 ### Usage examples
